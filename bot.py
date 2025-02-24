@@ -1,7 +1,7 @@
 import sqlite3
 from aiogram import Bot, types
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm import State, StatesGroup
+from aiogram.fsm import Dialog, DialogState
+from aiogram.fsm.state import State
 from aiogram.types import Message
 from aiogram.utils import telegram
 
@@ -12,7 +12,7 @@ bot = Bot(token=API_TOKEN)
 app = telegram.Application.builder().token(API_TOKEN).build()
 
 # Логика регистрации и логина
-class Form(StatesGroup):
+class Form(Dialog):
     username = State()
 
 @app.message_handler(commands=["login"])
