@@ -2,7 +2,6 @@ import asyncio
 import os
 import logging
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ParseMode
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -42,11 +41,11 @@ async def login(message: types.Message):
     async def ask_username(msg: types.Message):
         username = msg.text
         await msg.answer(f"Теперь введите пароль для {username}:")
-        
+
         @dp.message(lambda message: True)
         async def ask_password(pwd_msg: types.Message):
             password = pwd_msg.text
-            
+
             # Проверка введенных данных
             user_data = users_db.get(username)
             if user_data and user_data["password"] == password:
