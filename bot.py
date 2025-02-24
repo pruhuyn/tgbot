@@ -2,7 +2,6 @@ import asyncio
 import os
 import logging
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ParseMode
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
