@@ -2,8 +2,6 @@ import asyncio
 import os
 import logging
 from aiogram import Bot, Dispatcher, types
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.types import ParseMode
 from aiogram.utils import executor
 
 # Настройка логирования
