@@ -2,9 +2,8 @@ import sqlite3
 from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import Message
 from aiogram import Dispatcher
-from aiogram import Application
+from aiogram.client import Application  # Правильный импорт
 
 API_TOKEN = '8116355818:AAF3yBKLv4XpZn_-YqE7A5EeKVy905dNa0M'
 
@@ -17,12 +16,12 @@ class Form(StatesGroup):
     username = State()
 
 @app.message_handler(commands=["login"])
-async def cmd_login(message: Message, state: FSMContext):
+async def cmd_login(message: types.Message, state: FSMContext):
     await message.answer("Введите ваш username:")
     await Form.username.set()
 
 @app.message_handler(state=Form.username)
-async def check_username(message: Message, state: FSMContext):
+async def check_username(message: types.Message, state: FSMContext):
     username_to_check = message.text
 
     # Подключение к базе данных
