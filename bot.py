@@ -1,7 +1,11 @@
 import asyncio
 import os
+import logging
 from aiogram import Bot, Dispatcher, types
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from aiogram.types import ParseMode
+
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
 
 # Токен бота берём из переменных Railway
 TOKEN = os.getenv("TOKEN")
