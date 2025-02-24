@@ -1,10 +1,7 @@
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ParseMode
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from flask_sqlalchemy import SQLAlchemy
-import sqlite3
 
 # Токен бота берём из переменных Railway
 TOKEN = os.getenv("TOKEN")
