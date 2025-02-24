@@ -3,7 +3,7 @@ from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram import Dispatcher
-from aiogram.client import Application  # Правильный импорт
+from aiogram import Application  # Это правильный импорт для 3.x версии
 
 API_TOKEN = '8116355818:AAF3yBKLv4XpZn_-YqE7A5EeKVy905dNa0M'
 
