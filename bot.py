@@ -19,7 +19,7 @@ dp = Dispatcher()
 
 # База данных пользователей (используй свою БД)
 users_db = {
-    "admin": {"password": "adminpass", "is_logged_in": False}
+    123456789: {"username": "admin", "password": "adminpass", "is_logged_in": False}  # Замените ID на реальные
 }
 
 # Стейт для обработки состояний
@@ -39,7 +39,7 @@ async def login(message: Message):
     user_id = message.from_user.id
     
     # Проверка, авторизован ли пользователь
-    if users_db.get(str(user_id), {}).get("is_logged_in", False):
+    if users_db.get(user_id, {}).get("is_logged_in", False):
         await message.answer("Вы уже авторизованы!")
         return
     
@@ -52,16 +52,19 @@ async def process_username(message: Message):
     if Form.waiting_for_username:
         username = message.text.strip()
         
-        # Проверка на существующего пользователя
-        if username not in users_db:
-            await message.answer("Пользователь не найден. Попробуйте снова.")
-            return
+        # Находим пользователя по имени
+        user_found = False
+        for user_id, user_data in users_db.items():
+            if user_data["username"] == username:
+                user_found = True
+                Form.username = username
+                Form.waiting_for_username = False
+                Form.waiting_for_password = True
+                await message.answer(f"Теперь введите пароль для пользователя {username}:")
+                break
         
-        Form.username = username
-        Form.waiting_for_username = False
-        Form.waiting_for_password = True
-
-        await message.answer(f"Теперь введите пароль для пользователя {username}:")
+        if not user_found:
+            await message.answer("Пользователь не найден. Попробуйте снова.")
 
 # Ответ на ввод пароля
 @dp.message(F.text)
@@ -73,25 +76,27 @@ async def process_password(message: Message):
             await message.answer("Сначала введите имя пользователя!")
             return
         
-        user_data = users_db.get(Form.username)
-
         # Проверка пароля
-        if user_data and user_data["password"] == password:
-            users_db[str(message.from_user.id)] = {"password": password, "is_logged_in": True}
-            Form.waiting_for_password = False
-            Form.username = None
-            await message.answer(f"Добро пожаловать, {Form.username}!")
-        else:
-            await message.answer("Неверный пароль! Попробуйте снова.")
-            Form.waiting_for_password = False
-            Form.username = None
+        for user_id, user_data in users_db.items():
+            if user_data["username"] == Form.username:
+                if user_data["password"] == password:
+                    users_db[user_id]["is_logged_in"] = True
+                    Form.waiting_for_password = False
+                    Form.username = None
+                    await message.answer(f"Добро пожаловать, {Form.username}!")
+                    break
+                else:
+                    await message.answer("Неверный пароль! Попробуйте снова.")
+                    Form.waiting_for_password = False
+                    Form.username = None
+                    break
 
 # Команда /logout
 @dp.message(Command("logout"))
 async def logout(message: Message):
     user_id = message.from_user.id
-    if users_db.get(str(user_id), {}).get("is_logged_in", False):
-        users_db[str(user_id)]["is_logged_in"] = False
+    if users_db.get(user_id, {}).get("is_logged_in", False):
+        users_db[user_id]["is_logged_in"] = False
         await message.answer("Вы вышли из системы.")
     else:
         await message.answer("Вы не авторизованы!")
@@ -100,7 +105,7 @@ async def logout(message: Message):
 @dp.message()
 async def echo(message: Message):
     user_id = message.from_user.id
-    if users_db.get(str(user_id), {}).get("is_logged_in", False):
+    if users_db.get(user_id, {}).get("is_logged_in", False):
         await message.answer(f"Вы сказали: {message.text}")
     else:
         await message.answer("Вы не авторизованы! Для доступа используйте команду /login.")
