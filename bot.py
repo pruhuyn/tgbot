@@ -3,13 +3,14 @@ from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
-from aiogram.utils import telegram
+from aiogram import Dispatcher
+from aiogram import Application
 
 API_TOKEN = '8116355818:AAF3yBKLv4XpZn_-YqE7A5EeKVy905dNa0M'
 
 # Инициализация бота и приложения
 bot = Bot(token=API_TOKEN)
-app = telegram.Application.builder().token(API_TOKEN).build()
+app = Application.builder().token(API_TOKEN).build()
 
 # Определяем состояния
 class Form(StatesGroup):
