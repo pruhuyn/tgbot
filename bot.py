@@ -27,7 +27,7 @@ async def check_username(message: types.Message, state: FSMContext):
     username_to_check = message.text
 
     # Подключение к базе данных
-    conn = sqlite3.connect('C:\Users\Alexei\Desktop\tgbot\instance.users.db')  # Укажи путь к своей базе данных
+    conn = sqlite3.connect('C:\\Users\\Alexei\\Desktop\\tgbot\\instance.users.db')
     cursor = conn.cursor()
 
     cursor.execute("SELECT username FROM user WHERE username=?", (username_to_check,))
