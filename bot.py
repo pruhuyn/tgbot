@@ -10,26 +10,26 @@ if not TOKEN:
     raise ValueError("Нет токена! Добавь его в Railway.")
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher()
+dp = Dispatcher(bot)
 
 # Команда /start
-@dp.message(lambda message: message.text == "/start")
+@dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     await message.answer("Привет! Я работаю на Railway! 🚀")
 
 # Команда /help
-@dp.message(lambda message: message.text == "/help")
+@dp.message_handler(commands=['help'])
 async def help(message: types.Message):
     await message.answer("Доступные команды:\n/start - Запустить бота\n/help - Помощь")
 
 # Обработчик любых сообщений (эхо-бот)
-@dp.message()
+@dp.message_handler()
 async def echo(message: types.Message):
     await message.answer(f"Ты сказал: {message.text}")
 
 # Запуск бота
 async def main():
-    await dp.start_polling(bot)
+    await dp.start_polling()
 
 if __name__ == "__main__":
     asyncio.run(main())
