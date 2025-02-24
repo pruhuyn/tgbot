@@ -16,7 +16,7 @@ dp = Dispatcher()
 # Команда /start
 @dp.message(lambda message: message.text == "/start")
 async def start(message: types.Message):
-    await message.answer("Привет! Я работаю на Railway! 🚀")
+    await message.answer("Привет! Добро пожаловать в прухбот! 🚀")
 
 # Команда /help
 @dp.message(lambda message: message.text == "/help")
