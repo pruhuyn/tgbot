@@ -2,21 +2,21 @@ import asyncio
 import os
 import logging
 from aiogram import Bot, Dispatcher, types
+from aiogram.types import ParseMode
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 
-# Токен бота берём из переменных Railway
+# Токен бота из переменных окружения
 TOKEN = os.getenv("TOKEN")
 
 if not TOKEN:
-    raise ValueError("Нет токена! Добавь его в Railway.")
+    raise ValueError("Нет токена! Добавь его в переменные окружения.")
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
-# Заглушка для базы данных
-# Это можно заменить на реальную базу данных, например, SQLite
+# Заглушка для базы данных (это можно заменить на реальную БД)
 users_db = {
     "admin": {"password": "adminpass", "is_logged_in": False}
 }
@@ -39,12 +39,16 @@ async def login(message: types.Message):
 
     @dp.message(lambda message: True)
     async def ask_username(msg: types.Message):
-        username = msg.text
+        username = msg.text.strip()
+        if username not in users_db:
+            await msg.answer("Пользователь не найден! Попробуйте снова.")
+            return
+
         await msg.answer(f"Теперь введите пароль для {username}:")
 
         @dp.message(lambda message: True)
         async def ask_password(pwd_msg: types.Message):
-            password = pwd_msg.text
+            password = pwd_msg.text.strip()
 
             # Проверка введенных данных
             user_data = users_db.get(username)
@@ -66,6 +70,7 @@ async def echo(message: types.Message):
 
 # Запуск бота
 async def main():
+    # Инициализация Dispatcher и запуск polling
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
